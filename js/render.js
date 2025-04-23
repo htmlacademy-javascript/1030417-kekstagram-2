@@ -1,0 +1,21 @@
+import { photos } from "./data";
+
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const fragment = document.createDocumentFragment();
+const picturesBlock = document.querySelector('.pictures');
+
+const renderPhotos = () => {
+  photos.forEach(photo => {
+    const {url, likes, description} = photo;
+    const createdPhoto = pictureTemplate.cloneNode(true);
+    createdPhoto.querySelector('.picture__img').src = url;
+    createdPhoto.querySelector('.picture__img').alt = description;
+    createdPhoto.querySelector('.picture__comments').textContent = photo.comments.length;
+    createdPhoto.querySelector('.picture__likes').textContent = likes;
+    fragment.append(createdPhoto);
+  })
+
+  return fragment;
+}
+
+picturesBlock.append(renderPhotos());
