@@ -48,3 +48,5 @@ const getPhoto = () => {
 }
 
 const photos = Array.from({length: NUMBER_OF_PHOTOS}, getPhoto);
+
+export {photos};

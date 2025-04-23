@@ -54,4 +54,22 @@ const getRandomArrayElement = (array) => {
   return array[getRandomIntegerInRange(0, array.length - 1)];
 }
 
+const getTimeInMinutes = (time) => {
+  const [hours, minutes] = time.split(':');
+  time = (+hours)*60+(+minutes);
+  return time;
+}
+
+const getAvailability = (startTime, finishTime, apointmentTime, duration) => {
+  const workStartTime = getTimeInMinutes(startTime);
+  const workFinishTime = getTimeInMinutes(finishTime);
+  const apointmentStart = getTimeInMinutes(apointmentTime);
+  const apointmentFinish = apointmentStart + duration;
+  console.log(workFinishTime, apointmentFinish)
+  if (apointmentStart >= workStartTime && apointmentFinish <= workFinishTime ) {
+    return true;
+  }
+  return false;
+}
+
 export {getUniqueNumber, getRandomArrayElement, getRandomIntegerInRange}
