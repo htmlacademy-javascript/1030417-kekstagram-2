@@ -72,4 +72,12 @@ const getAvailability = (startTime, finishTime, apointmentTime, duration) => {
   return false;
 }
 
-export {getUniqueNumber, getRandomArrayElement, getRandomIntegerInRange}
+const onEscapeKey = (evt) => {
+  return evt.key === 'Escape';
+};
+
+const onEnterKey = (evt) => {
+  return evt.key === 'Enter';
+};
+
+export {getUniqueNumber, getRandomArrayElement, getRandomIntegerInRange, onEscapeKey, onEnterKey}
