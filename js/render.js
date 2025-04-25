@@ -19,20 +19,9 @@ const renderPhotos = () => {
   return fragment;
 }
 
-const renderComments = (photo) => {
-  const container = document.createDocumentFragment();
-  const template = document.querySelector('.social__comment');
-  for (let i = 0; i<photo.comments.length; i++) {
-    const comment = template.cloneNode(true);
-    container.append(comment);
-    comment.querySelector('.social__picture').src = photo.comments[i].avatar;
-    comment.querySelector('.social__picture').alt = photo.comments[i].name;
-    comment.querySelector('.social__text').textContent = photo.comments[i].message;
-  }
-  return container;
-}
+
 
 picturesBlock.append(renderPhotos());
 
-export {picturesBlock, renderComments}
+export {picturesBlock}
 

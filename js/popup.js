@@ -1,12 +1,13 @@
 import {onEscapeKey, onEnterKey} from './util.js';
 import { photos } from './data.js';
-import { picturesBlock, renderComments } from './render.js';
+import { picturesBlock } from './render.js';
+import {renderComments, createComments, clearComments, uploadMoreButton} from './render-comments.js';
+
 
 const popup = document.querySelector('.big-picture');
 const popupCloseButton = document.querySelector('.big-picture__cancel');
 const commentsList = document.querySelector('.social__comments');
-const uploadMoreButton = document.querySelector('.social__comments-loader');
-const commentsCounter = document.querySelector('.social__comment-count');
+
 
 const closeOnEscape = (evt) => {
   if (onEscapeKey(evt)) {
@@ -23,7 +24,7 @@ const closeOnEnter = (evt) => {
 const openPopup = (evt) => {
   popup.classList.remove('hidden');
   document.addEventListener('keydown', closeOnEscape);
-  popupCloseButton.addEventListener('keydown', closeOnEnter)
+  popupCloseButton.addEventListener('keydown', closeOnEnter);
 
   const picture = evt.target.closest('.picture');
   popup.querySelector('.likes-count').textContent = picture.querySelector('.picture__likes').textContent;
@@ -32,26 +33,25 @@ const openPopup = (evt) => {
   const photo = photos.find(p => {
     return imgUrl === p.id;
   });
-  uploadMoreButton.classList.add('hidden');
-  commentsCounter.classList.add('hidden');
   document.querySelector('body').classList.add('modal-open');
   popup.querySelector('.social__caption').textContent = photo.description;
   popup.querySelector('.social__comment-total-count').textContent = photo.comments.length;
-  const comments = renderComments(photo);
-  commentsList.innerHTML = '';
-  commentsList.append(comments);
+  const comments = createComments(photo);
+  clearComments(commentsList);
+  renderComments(comments, commentsList);
 
+  uploadMoreButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    renderComments(comments, commentsList);
+  })
 }
-
-
 
 const closePopup = () => {
   popup.classList.add('hidden');
   document.removeEventListener('keydown', closeOnEscape);
-  popupCloseButton.removeEventListener('keydown', closeOnEnter)
-  uploadMoreButton.classList.remove('hidden');
-  commentsCounter.classList.remove('hidden');
+  popupCloseButton.removeEventListener('keydown', closeOnEnter);
   document.querySelector('body').classList.remove('modal-open');
+  clearComments(commentsList);
 }
 
 popupCloseButton.addEventListener('click', (evt) => {
@@ -64,6 +64,8 @@ picturesBlock.addEventListener('click', (evt) => {
     openPopup(evt);
   }
 });
+
+
 
 
 
