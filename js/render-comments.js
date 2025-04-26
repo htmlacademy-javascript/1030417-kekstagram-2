@@ -1,5 +1,4 @@
 const COMMENTS_STEP = 5;
-let currentCount = 0;
 const commentListElement = document.querySelector('.social__comment');
 const shownCommentsCounter = document.querySelector('.social__comment-shown-count');
 const uploadMoreButton = document.querySelector('.social__comments-loader');
@@ -17,12 +16,15 @@ const createComments = (photo) => {
   return comments;
 }
 
-const renderComments = (comments, container, count) => {
+let currentCount = 0;
+
+const renderComments = (comments, container) => {
 
   const renderedComments = comments.slice(currentCount, currentCount + COMMENTS_STEP);
   renderedComments.forEach(comment => {
     container.append(comment)
   });
+
 
   currentCount += 5;
 
@@ -38,10 +40,9 @@ const renderComments = (comments, container, count) => {
 };
 
 const clearComments = (commentsList) => {
-  currentCount = 0;
   commentsList.innerHTML = '';
   uploadMoreButton.classList.remove('hidden');
-
+  currentCount = 0;
 }
 
 export {renderComments, createComments, clearComments, uploadMoreButton}
