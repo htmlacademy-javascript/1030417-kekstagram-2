@@ -7,7 +7,7 @@ import {renderComments, createComments, clearComments, uploadMoreButton} from '.
 const popup = document.querySelector('.big-picture');
 const popupCloseButton = document.querySelector('.big-picture__cancel');
 const commentsList = document.querySelector('.social__comments');
-
+let comments;
 
 const closeOnEscape = (evt) => {
   if (onEscapeKey(evt)) {
@@ -36,15 +36,15 @@ const openPopup = (evt) => {
   document.querySelector('body').classList.add('modal-open');
   popup.querySelector('.social__caption').textContent = photo.description;
   popup.querySelector('.social__comment-total-count').textContent = photo.comments.length;
-  const comments = createComments(photo);
+  comments = createComments(photo);
   clearComments(commentsList);
   renderComments(comments, commentsList);
-
-  uploadMoreButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    renderComments(comments, commentsList);
-  })
 }
+
+uploadMoreButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  renderComments(comments, commentsList);
+})
 
 const closePopup = () => {
   popup.classList.add('hidden');
