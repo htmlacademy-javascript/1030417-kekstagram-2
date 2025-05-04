@@ -3,6 +3,7 @@ const effects = document.querySelectorAll('.effects__radio');
 const sliderValue = document.querySelector('.effect-level__value');
 const sliderElement = document.querySelector('.effect-level__slider');
 const image = document.querySelector('.img-upload__preview img');
+const sliderBox = document.querySelector('.img-upload__effect-level');
 let currentEffect = 'none';
 
 noUiSlider.create(sliderElement, {
@@ -11,6 +12,8 @@ noUiSlider.create(sliderElement, {
   step: 0.1,
   connect: 'lower'
 });
+
+sliderBox.classList.add('hidden');
 
 const updateSlider = (effect) => {
   switch (effect) {
@@ -96,3 +99,12 @@ effects.forEach((input) => {
     }
   });
 });
+
+const resetEffect = () => {
+  effectField.value = '';
+  applyFilter('none');
+  updateSlider('none');
+  sliderBox.classList.add('hidden');
+}
+
+export {updateSlider, resetEffect}

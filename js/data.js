@@ -15,6 +15,11 @@ const messages = [
 ];
 const names = ['John', 'Viktoria', 'Nancy', 'Christopher', 'Tom', 'Alyosha', 'Sergey', 'Konstantin']
 
+// const renderComments = (data) => {
+//   data
+// }
+
+
 const getComments = (commentsCount) => {
   const comments = [];
   const getCommentId = getUniqueNumber(1, COMMENT_ID_MAX);
@@ -49,6 +54,6 @@ const getPhoto = () => {
 
 const photos = Array.from({length: NUMBER_OF_PHOTOS}, getPhoto);
 
-export {photos};
+export {photos, NUMBER_OF_PHOTOS};
 
 

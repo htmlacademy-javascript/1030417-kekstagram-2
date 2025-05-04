@@ -1,6 +1,5 @@
 import {onEscapeKey, onEnterKey} from './util.js';
 import { photos } from './data.js';
-import { picturesBlock } from './render.js';
 import {renderComments, createComments, clearComments, uploadMoreButton} from './render-comments.js';
 
 
@@ -21,7 +20,7 @@ const closeOnEnter = (evt) => {
   }
 };
 
-const openPopup = (evt) => {
+const openPopup = (evt, data) => {
   popup.classList.remove('hidden');
   document.addEventListener('keydown', closeOnEscape);
   popupCloseButton.addEventListener('keydown', closeOnEnter);
@@ -30,7 +29,7 @@ const openPopup = (evt) => {
   popup.querySelector('.likes-count').textContent = picture.querySelector('.picture__likes').textContent;
   popup.querySelector('.big-picture__img').firstElementChild.src = picture.querySelector('.picture__img').src;
   const imgUrl = Number(picture.dataset.id);
-  const photo = photos.find(p => {
+  const photo = data.find(p => {
     return imgUrl === p.id;
   });
   document.querySelector('body').classList.add('modal-open');
@@ -40,6 +39,8 @@ const openPopup = (evt) => {
   clearComments(commentsList);
   renderComments(comments, commentsList);
 }
+
+
 
 uploadMoreButton.addEventListener('click', (evt) => {
   evt.preventDefault();
@@ -59,11 +60,9 @@ popupCloseButton.addEventListener('click', (evt) => {
   closePopup();
 });
 
-picturesBlock.addEventListener('click', (evt) => {
-  if (evt.target.closest('.picture')) {
-    openPopup(evt);
-  }
-});
+
+
+export {openPopup}
 
 
 

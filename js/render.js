@@ -4,9 +4,9 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const fragment = document.createDocumentFragment();
 const picturesBlock = document.querySelector('.pictures');
 
-const renderPhotos = () => {
+const renderPhotos = (photos) => {
   photos.forEach(photo => {
-    const {url, likes, description} = photo;
+    const {url, description, comments, likes} = photo;
     const createdPhoto = pictureTemplate.cloneNode(true);
     createdPhoto.querySelector('.picture__img').src = url;
     createdPhoto.querySelector('.picture__img').alt = description;
@@ -14,14 +14,10 @@ const renderPhotos = () => {
     createdPhoto.querySelector('.picture__likes').textContent = likes;
     createdPhoto.dataset.id = photo.id;
     fragment.append(createdPhoto);
-  })
+  });
 
-  return fragment;
+  picturesBlock.append(fragment);
 }
 
-
-
-picturesBlock.append(renderPhotos());
-
-export {picturesBlock}
+export {renderPhotos}
 
