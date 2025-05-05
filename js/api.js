@@ -1,11 +1,14 @@
 import { NUMBER_OF_PHOTOS } from "./data.js";
 import { renderPhotos } from "./render.js";
 import { openPopup } from "./popup.js";
-
+import { getRandomPhotos, getPopularPhotos, changeActiveFilter, clearPreviousPhotos } from "./filter.js";
 
 const MESSAGE_CLOSING_TIME = 5000;
 
 const picturesBlock = document.querySelector('.pictures');
+const defaultPhotosButton = document.querySelector('#filter-default');
+const randomPhotosButton = document.querySelector('#filter-random');
+const popularPhotosButton = document.querySelector('#filter-discussed');
 
 const getData = () => {
   return fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
@@ -25,6 +28,23 @@ getData()
       if (evt.target.closest('.picture')) {
         openPopup(evt, photos);
       }
+    });
+    document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+    defaultPhotosButton.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      clearPreviousPhotos()
+      changeActiveFilter(evt.target);
+      renderPhotos(photos);
+    })
+    randomPhotosButton.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      changeActiveFilter(evt.target);
+      getRandomPhotos(photos);
+    });
+    popularPhotosButton.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      changeActiveFilter(evt.target);
+      getPopularPhotos(photos);
     });
   })
   .catch((err) => {
