@@ -6,3 +6,5 @@ import './validation.js'
 import './render-comments.js';
 import './slider.js'
 import './api.js'
+import './filter.js'
+import './escControl.js'

@@ -2,7 +2,6 @@ import {onEscapeKey, onEnterKey} from './util.js';
 import { isValid } from './validation.js';
 import { updateSlider, resetEffect } from './slider.js';
 
-
 const SCALE_STEP = 0.25;
 const SCALE_MIN_VALUE = 0.25;
 const SCALE_MAX_VALUE = 1;
@@ -87,6 +86,7 @@ const createErrorMessage = () => {
   const errorTemplate = document.querySelector('#error').content.querySelector('.error');
   const errorMessage = errorTemplate.cloneNode(true);
   document.body.insertAdjacentElement('beforeend', errorMessage);
+
   errorMessage.querySelector('.error__button').addEventListener('click', (evt) => {
     evt.preventDefault();
     errorMessage.remove();
