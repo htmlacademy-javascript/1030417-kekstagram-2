@@ -1,10 +1,16 @@
-import './data.js';
-import './render.js';
-import './popup.js';
+import { getData } from './api.js';
+import { initFilters } from './filter.js';
+import { renderPhotos } from './render.js';
+import { showAlert } from './util.js';
 import './form.js';
-import './validation.js'
-import './render-comments.js';
-import './slider.js'
-import './api.js'
-import './filter.js'
-import './escControl.js'
+
+getData()
+  .then((photos) => {
+    renderPhotos(photos);
+    initFilters(photos);
+  })
+  .catch(() => {
+    showAlert();
+  });
+
+
