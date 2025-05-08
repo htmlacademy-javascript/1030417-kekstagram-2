@@ -1,4 +1,5 @@
-const effectField = document.querySelector('.effect-level__value');
+import { FILTERS_SETTINGS } from './constants.js';
+
 const effects = document.querySelectorAll('.effects__radio');
 const sliderValue = document.querySelector('.effect-level__value');
 const sliderElement = document.querySelector('.effect-level__slider');
@@ -7,9 +8,7 @@ const sliderBox = document.querySelector('.img-upload__effect-level');
 let currentEffect = 'none';
 
 noUiSlider.create(sliderElement, {
-  range: { min: 0, max: 1 },
-  start: 0,
-  step: 0.1,
+  ...FILTERS_SETTINGS['none'],
   connect: 'lower'
 });
 
@@ -19,40 +18,20 @@ const updateSlider = (effect) => {
   switch (effect) {
     case 'chrome':
     case 'sepia':
-      sliderElement.noUiSlider.updateOptions({
-        range: { min: 0, max: 1 },
-        step: 0.1,
-        start: 0
-      });
+      sliderElement.noUiSlider.updateOptions(FILTERS_SETTINGS['chrome']);
       break;
     case 'marvin':
-      sliderElement.noUiSlider.updateOptions({
-        range: { min: 0, max: 100 },
-        step: 1,
-        start: 0
-      });
+      sliderElement.noUiSlider.updateOptions(FILTERS_SETTINGS['marvin']);
       break;
     case 'phobos':
-      sliderElement.noUiSlider.updateOptions({
-        range: { min: 0, max: 3 },
-        step: 0.1,
-        start: 0
-      });
+      sliderElement.noUiSlider.updateOptions(FILTERS_SETTINGS['phobos']);
       break;
     case 'heat':
-      sliderElement.noUiSlider.updateOptions({
-        range: { min: 1, max: 3 },
-        step: 0.1,
-        start: 1
-      });
+      sliderElement.noUiSlider.updateOptions(FILTERS_SETTINGS['heat']);
       break;
     case 'none':
     default:
-      sliderElement.noUiSlider.updateOptions({
-        range: { min: 0, max: 1 },
-        step: 0.1,
-        start: 0
-      });
+      sliderElement.noUiSlider.updateOptions(FILTERS_SETTINGS['none']);
       break;
   }
 };
@@ -101,10 +80,10 @@ effects.forEach((input) => {
 });
 
 const resetEffect = () => {
-  effectField.value = '';
+  sliderElement.value = '';
   applyFilter('none');
   updateSlider('none');
   sliderBox.classList.add('hidden');
-}
+};
 
-export {updateSlider, resetEffect}
+export { updateSlider, resetEffect };
