@@ -1,33 +1,41 @@
-const modalStack = [];
+const windows = [];
+let listener = null;
 
-export const openModal = (modal) => {
-  modal.classList.remove('hidden');
-  modalStack.push(modal);
-  console.log(modalStack)
-}
+const onDocumentKeydown = (evt) => {
+  if (evt.key === 'Escape') {
+    const lastWindowIndex = windows.length - 1;
+    if (windows[lastWindowIndex].condition && typeof windows[lastWindowIndex].condition === 'function') {
+      if (!windows[lastWindowIndex].condition()) {
+        return;
+      }
+    }
 
-export const closeModal = (modal) => {
-  modal.classList.add('hidden');
-  modalStack.pop();
-  console.log(modalStack)
-}
+    windows[lastWindowIndex].closeFunction();
+    windows.length = windows.length - 1;
 
-document.addEventListener("keydown", (event) => {
-  if (event.key !== "Escape") return;
-
-  const topModal = modalStack[modalStack.length - 1];
-  if (!topModal) return;
-  const activeElement = document.activeElement;
-
-  const isEditable = (activeElement.tagName === 'INPUT') ||
-  activeElement.tagName === 'TEXTAREA' ||
-  activeElement.isContentEditable;
-
-  const isInTopModal = topModal.contains(activeElement);
-
-  if (isInTopModal && isEditable) {
-    return;
+    if (!windows.length) {
+      document.removeEventListener('keydown', onDocumentKeydown);
+      listener = null;
+    }
   }
+};
 
-  closeModal(topModal);
-});
+export const setEscControl = (closeFunction, condition = null) => {
+  windows.push({
+    closeFunction,
+    condition,
+  });
+
+  if (!listener) {
+    listener = document.addEventListener('keydown', onDocumentKeydown);
+  }
+};
+
+export const removeEscControl = () => {
+  windows.length = windows.length - 1;
+
+  if (!windows.length) {
+    document.removeEventListener('keydown', onDocumentKeydown);
+    listener = null;
+  }
+};

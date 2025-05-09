@@ -1,11 +1,12 @@
-const COMMENTS_STEP = 5;
+import { COMMENTS_STEP } from './constants.js';
+
 const commentListElement = document.querySelector('.social__comment');
 const shownCommentsCounter = document.querySelector('.social__comment-shown-count');
 const uploadMoreButton = document.querySelector('.social__comments-loader');
 
 const createComments = (photo) => {
   const comments = [];
-  photo.comments.forEach(comment => {
+  photo.comments.forEach((comment) => {
     const newComment = commentListElement.cloneNode(true);
     newComment.querySelector('.social__picture').src = comment.avatar;
     newComment.querySelector('.social__picture').alt = comment.name;
@@ -14,15 +15,15 @@ const createComments = (photo) => {
   });
 
   return comments;
-}
+};
 
 let currentCount = 0;
 
 const renderComments = (comments, container) => {
 
   const renderedComments = comments.slice(currentCount, currentCount + COMMENTS_STEP);
-  renderedComments.forEach(comment => {
-    container.append(comment)
+  renderedComments.forEach((comment) => {
+    container.append(comment);
   });
 
 
@@ -43,6 +44,6 @@ const clearComments = (commentsList) => {
   commentsList.innerHTML = '';
   uploadMoreButton.classList.remove('hidden');
   currentCount = 0;
-}
+};
 
-export {renderComments, createComments, clearComments, uploadMoreButton}
+export { renderComments, createComments, clearComments, uploadMoreButton };

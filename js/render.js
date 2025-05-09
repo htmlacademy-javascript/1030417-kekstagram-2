@@ -1,12 +1,21 @@
-import { photos } from "./data";
+import { openPopup } from './popup.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const fragment = document.createDocumentFragment();
 const picturesBlock = document.querySelector('.pictures');
+let currentPhotos;
+
+const clear = () => {
+  document.querySelectorAll('.picture').forEach((item) => {
+    item.remove();
+  });
+};
 
 const renderPhotos = (photos) => {
-  photos.forEach(photo => {
-    const {url, description, comments, likes} = photo;
+  clear();
+  currentPhotos = photos;
+  const fragment = document.createDocumentFragment();
+  photos.forEach((photo) => {
+    const { url, description, likes } = photo;
     const createdPhoto = pictureTemplate.cloneNode(true);
     createdPhoto.querySelector('.picture__img').src = url;
     createdPhoto.querySelector('.picture__img').alt = description;
@@ -17,7 +26,13 @@ const renderPhotos = (photos) => {
   });
 
   picturesBlock.append(fragment);
-}
+};
 
-export {renderPhotos}
+picturesBlock.addEventListener('click', (evt) => {
+  if (evt.target.closest('.picture')) {
+    openPopup(evt, currentPhotos);
+  }
+});
+
+export { renderPhotos };
 

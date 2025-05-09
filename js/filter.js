@@ -1,46 +1,51 @@
-import { getRandomIntegerInRange, getRandomArrayElement } from "./util.js";
-import { renderPhotos } from "./render.js";
+import { renderPhotos } from './render.js';
+import { FILTERS } from './constants.js';
+import { debounce } from './util.js';
 
-const RANDOM_PHOTOS_COUNT = 10;
+const form = document.querySelector('.img-filters__form');
 
-const defaultPhotosButton = document.querySelector('#filter-default');
-const randomPhotosButton = document.querySelector('#filter-random');
-const popularPhotosButton = document.querySelector('#filter-discussed');
-const picturesBlock = document.querySelector('.pictures');
+let localPhotos;
+
+const debouncedRender = debounce(renderPhotos);
 
 const clearPreviousPhotos = () => {
-  document.querySelectorAll('.picture').forEach(picture => picture.remove());
-}
+  document.querySelectorAll('.picture').forEach((picture) => picture.remove());
+};
 
 const changeActiveFilter = (target) => {
-  document.querySelectorAll('.img-filters__button').forEach(button => button.classList.remove('img-filters__button--active'));
+  document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
   target.classList.add('img-filters__button--active');
-}
+};
 
-const getRandomPhotos = (photos) => {
-  let selectedPhotos = [];
-  for (let i = 0; i < RANDOM_PHOTOS_COUNT; i++) {
-    let selectedPhoto = getRandomArrayElement(photos);
-    while (selectedPhotos.some(item => item === selectedPhoto)) {
-      selectedPhoto = getRandomArrayElement(photos);
-    }
-    selectedPhotos.push(selectedPhoto);
-  }
-  clearPreviousPhotos();
-  renderPhotos(selectedPhotos);
-}
+const getRandomPhotos = () => [...localPhotos].sort(() => Math.random() - 0.5).slice(0, 10);
 
 const sortByCommentsAmmount = (a, b) => {
   const photoA = a.comments.length;
   const photoB = b.comments.length;
 
   return photoB - photoA;
-}
+};
 
-const getPopularPhotos = (photos) => {
-  const selectedPhotos = photos.slice().sort(sortByCommentsAmmount);
-  clearPreviousPhotos();
-  renderPhotos(selectedPhotos)
-}
+const getPopularPhotos = () => localPhotos.slice().sort(sortByCommentsAmmount);
 
-export {getRandomPhotos, getPopularPhotos, changeActiveFilter, clearPreviousPhotos}
+const FiltersActions = {
+  [FILTERS.DEFAULT]: () => localPhotos,
+  [FILTERS.DISCUSSED]: getPopularPhotos,
+  [FILTERS.RANDOM]: getRandomPhotos
+};
+
+export const initFilters = (photos) => {
+  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+  localPhotos = [...photos];
+};
+
+form.addEventListener('click', ({ target }) => {
+  const button = target.closest('.img-filters__button');
+  if (button) {
+    changeActiveFilter(target);
+    debouncedRender(FiltersActions[target.id]());
+  }
+
+});
+
+export { getRandomPhotos, getPopularPhotos, changeActiveFilter, clearPreviousPhotos };
