@@ -10,16 +10,17 @@ const reduceScale = () => {
   if (value > SCALE_MIN_VALUE) {
     value -= SCALE_STEP;
     image.style.transform = `scale(${value})`;
-    scale.value = `${value * 100}%`;
+    scale.value = `${Number(value) * 100}%`;
   }
 };
 
 const increaseScale = () => {
   let value = parseInt(scale.value, 10) / 100;
+
   if (SCALE_MAX_VALUE > value) {
     value += SCALE_STEP;
     image.style.transform = `scale(${value})`;
-    scale.value = `${value * 100}%`;
+    scale.value = `${Number(value) * 100}%`;
   }
 };
 

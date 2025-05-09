@@ -12,7 +12,6 @@ const pristine = new Pristine(form, {
 });
 
 const checkDescription = (value) => value.length <= MAX_DESCRIPTION;
-
 const createHashtags = (text) => text.toLowerCase().split(' ').filter((item) => item.length);
 
 const checkHashtags = (value) => {
@@ -33,7 +32,8 @@ const countHashtags = (value) => {
 pristine.addValidator(
   description,
   checkDescription,
-  `Допустимая длина комментария-не больше ${MAX_DESCRIPTION} символов`);
+  `Допустимая длина комментария-не больше ${MAX_DESCRIPTION} символов`
+);
 
 pristine.addValidator(
   hashtag,
@@ -53,7 +53,17 @@ pristine.addValidator(
   'Недопустимо повторение хештегов'
 );
 
+const isValid = () => {
+  const result = pristine.validate();
+  if (result) {
+    pristine.reset();
+    const errorElements = document.querySelectorAll('.img-upload__field-wrapper--error');
+    errorElements.forEach((errorElement) => {
+      errorElement.classList.remove('img-upload__field-wrapper--error');
+    });
+  }
 
-const isValid = () => pristine.validate();
+  return result;
+};
 
-export {isValid};
+export { isValid };

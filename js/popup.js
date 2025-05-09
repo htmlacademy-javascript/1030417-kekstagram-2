@@ -1,5 +1,6 @@
-import { onEscapeKey, onEnterKey } from './util.js';
+import { onEnterKey } from './util.js';
 import { renderComments, createComments, clearComments, uploadMoreButton } from './render-comments.js';
+import { setEscControl } from './escControl.js';
 
 const popup = document.querySelector('.big-picture');
 const popupCloseButton = document.querySelector('.big-picture__cancel');
@@ -12,12 +13,6 @@ const closePopup = () => {
   clearComments(commentsList);
 };
 
-const closeOnEscape = (evt) => {
-  if (onEscapeKey(evt)) {
-    closePopup();
-  }
-};
-
 const closeOnEnter = (evt) => {
   if (onEnterKey(evt)) {
     closePopup();
@@ -26,9 +21,8 @@ const closeOnEnter = (evt) => {
 
 const openPopup = (evt, data) => {
   popup.classList.remove('hidden');
-  document.addEventListener('keydown', closeOnEscape);
+  setEscControl(closePopup);
   popupCloseButton.addEventListener('keydown', closeOnEnter);
-
   const picture = evt.target.closest('.picture');
   popup.querySelector('.likes-count').textContent = picture.querySelector('.picture__likes').textContent;
   popup.querySelector('.big-picture__img').firstElementChild.src = picture.querySelector('.picture__img').src;
@@ -38,6 +32,7 @@ const openPopup = (evt, data) => {
   popup.querySelector('.social__caption').textContent = photo.description;
   popup.querySelector('.social__comment-total-count').textContent = photo.comments.length;
   comments = createComments(photo);
+  setEscControl(closePopup);
   clearComments(commentsList);
   renderComments(comments, commentsList);
 };

@@ -1,8 +1,10 @@
-import { onEscapeKey, onEnterKey } from './util.js';
+import { onEnterKey } from './util.js';
 import { isValid } from './validation.js';
 import { resetEffect } from './slider.js';
 import { initScale } from './scale.js';
 import { sendData } from './api.js';
+import { MESSAGES } from './constants.js';
+import { setEscControl, removeEscControl } from './escControl.js';
 
 const fileUploader = document.querySelector('.img-upload__input');
 const photoEdit = document.querySelector('.img-upload__overlay');
@@ -10,14 +12,37 @@ const closeFormButton = document.querySelector('.img-upload__cancel');
 const form = document.querySelector('.img-upload__form');
 const submitButton = document.querySelector('.img-upload__submit');
 const image = document.querySelector('.img-upload__preview img');
+const hashtag = document.querySelector('.text__hashtags');
+const description = document.querySelector('.text__description');
 
 initScale();
+
+const canCloseForm = () => !(document.activeElement === hashtag || document.activeElement === description);
 
 const closeForm = () => {
   photoEdit.classList.add('hidden');
   document.body.classList.remove('modal-open');
   form.reset();
   image.style.transform = 'scale(1)';
+};
+
+const showMessage = (messageType) => {
+  const message = MESSAGES[messageType].cloneNode(true);
+  document.body.insertAdjacentElement('beforeend', message);
+  message.querySelector(`.${messageType}__button`).addEventListener('click', (evt) => {
+    evt.preventDefault();
+    message.remove();
+    removeEscControl();
+  });
+  message.addEventListener('click', (evt) => {
+    if (!evt.target.closest(`.${messageType}__inner`)) {
+      message.remove();
+      removeEscControl();
+    }
+  });
+  setEscControl(() => {
+    message.remove();
+  });
 };
 
 const closeOnEnter = (evt) => {
@@ -31,39 +56,12 @@ const closeOnClick = (evt) => {
   closeForm();
 };
 
-const closeOnEscape = (evt) => {
-  if (onEscapeKey(evt)) {
-    closeForm();
-    if (document.querySelector('.error')) {
-      document.querySelector('.error').remove();
-    }
-    if (document.querySelector('.success')) {
-      document.querySelector('.success').remove();
-    }
-  }
-};
-
-const createErrorMessage = () => {
-  const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-  const errorMessage = errorTemplate.cloneNode(true);
-  document.body.insertAdjacentElement('beforeend', errorMessage);
-
-  errorMessage.querySelector('.error__button').addEventListener('click', (evt) => {
-    evt.preventDefault();
-    errorMessage.remove();
-  });
-  errorMessage.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.sucess__inner')) {
-      errorMessage.remove();
-    }
-  });
-};
-
 const changeUploadedPhoto = () => {
   photoEdit.classList.remove('hidden');
   document.body.classList.add('modal-open');
   closeFormButton.addEventListener('click', closeOnClick);
   closeFormButton.addEventListener('keydown', closeOnEnter);
+  setEscControl(closeForm, canCloseForm);
 };
 
 fileUploader.addEventListener('change', (evt) => {
@@ -74,26 +72,9 @@ fileUploader.addEventListener('change', (evt) => {
     image.src = fileUrl;
     changeUploadedPhoto();
   } else {
-    createErrorMessage();
+    throw new Error('Файл не подходит');
   }
 });
-
-document.addEventListener('keydown', closeOnEscape);
-
-const createSuccessMessage = () => {
-  const successTemplate = document.querySelector('#success').content.querySelector('.success');
-  const successMessage = successTemplate.cloneNode(true);
-  document.body.insertAdjacentElement('beforeend', successMessage);
-  successMessage.querySelector('.success__button').addEventListener('click', (evt) => {
-    evt.preventDefault();
-    successMessage.remove();
-  });
-  successMessage.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.sucess__inner')) {
-      successMessage.remove();
-    }
-  });
-};
 
 form.addEventListener('submit', (evt) => {
   const valid = isValid();
@@ -105,12 +86,11 @@ form.addEventListener('submit', (evt) => {
   if (valid) {
     sendData(form)
       .then(() => {
-        createSuccessMessage();
-        closeForm();
+        showMessage('success');
         resetEffect();
       })
       .catch(() => {
-        createErrorMessage();
+        showMessage('error');
       })
       .finally(() => {
         submitButton.disabled = false;

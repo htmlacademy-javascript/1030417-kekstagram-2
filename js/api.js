@@ -1,4 +1,4 @@
-export const getData = () => fetch('https://31.javascript.htmlacademy.pro/kekstagram/data')
+export const getData = () => fetch('https://31.javascript.htmlacademy.pro/kekstagram/data/')
   .then((response) => {
     if (!response.ok) {
       throw new Error('Ошибка');
@@ -7,7 +7,7 @@ export const getData = () => fetch('https://31.javascript.htmlacademy.pro/keksta
   });
 
 
-export const sendData = (data) => fetch('https://31.javascript.htmlacademy.pro/kekstagram', {
+export const sendData = (data) => fetch('https://31.javascript.htmlacademy.pro/kekstagram/', {
   method: 'POST',
   body: new FormData(data),
 }).then((response) => {
