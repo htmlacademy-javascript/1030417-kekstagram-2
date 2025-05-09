@@ -61,8 +61,9 @@ const applyFilter = (value) => {
 };
 
 sliderElement.noUiSlider.on('update', (value) => {
-  sliderValue.value = value;
-  applyFilter(value);
+  const cleanValue = String(Number(value[0]));
+  sliderValue.value = cleanValue;
+  applyFilter(cleanValue);
 });
 
 effects.forEach((input) => {
