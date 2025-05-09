@@ -51,6 +51,7 @@ export const MESSAGES = {
   success: document.querySelector('#success').content.querySelector('.success'),
   error: document.querySelector('#error').content.querySelector('.error'),
 };
+
 export const RANDOM_PHOTOS_COUNT = 10;
 export const SCALE_MIN_VALUE = 0.25;
 export const SCALE_MAX_VALUE = 1;
