@@ -37,7 +37,6 @@ const openPopup = (evt, data) => {
   renderComments(comments, commentsList);
 };
 
-
 uploadMoreButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   renderComments(comments, commentsList);

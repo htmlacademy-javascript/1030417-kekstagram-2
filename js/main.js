@@ -4,7 +4,6 @@ import { renderPhotos } from './render.js';
 import { showAlert } from './util.js';
 import './form.js';
 
-
 window.addEventListener('load', () => {
   getData()
     .then((photos) => {

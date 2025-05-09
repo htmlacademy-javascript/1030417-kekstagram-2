@@ -1,6 +1,6 @@
 import { onEnterKey } from './util.js';
 import { isValid } from './validation.js';
-import { resetEffect } from './slider.js';
+import { resetEffect, checkForNoEffects } from './slider.js';
 import { initScale } from './scale.js';
 import { sendData } from './api.js';
 import { MESSAGES } from './constants.js';
@@ -61,6 +61,7 @@ const changeUploadedPhoto = () => {
   document.body.classList.add('modal-open');
   closeFormButton.addEventListener('click', closeOnClick);
   closeFormButton.addEventListener('keydown', closeOnEnter);
+  checkForNoEffects();
   setEscControl(closeForm, canCloseForm);
 };
 
