@@ -8,10 +8,6 @@ let localPhotos;
 
 const debouncedRender = debounce(renderPhotos);
 
-const clearPreviousPhotos = () => {
-  document.querySelectorAll('.picture').forEach((picture) => picture.remove());
-};
-
 const changeActiveFilter = (target) => {
   document.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
   target.classList.add('img-filters__button--active');
@@ -28,13 +24,13 @@ const sortByCommentsAmmount = (a, b) => {
 
 const getPopularPhotos = () => localPhotos.slice().sort(sortByCommentsAmmount);
 
-const FiltersActions = {
+const filtersActions = {
   [FILTERS.DEFAULT]: () => localPhotos,
   [FILTERS.DISCUSSED]: getPopularPhotos,
   [FILTERS.RANDOM]: getRandomPhotos
 };
 
-export const initFilters = (photos) => {
+export const enableFilters = (photos) => {
   document.querySelector('.img-filters').classList.remove('img-filters--inactive');
   localPhotos = [...photos];
 };
@@ -43,9 +39,9 @@ form.addEventListener('click', ({ target }) => {
   const button = target.closest('.img-filters__button');
   if (button) {
     changeActiveFilter(target);
-    debouncedRender(FiltersActions[target.id]());
+    debouncedRender(filtersActions[target.id]());
   }
 
 });
 
-export { getRandomPhotos, getPopularPhotos, changeActiveFilter, clearPreviousPhotos };
+export { getRandomPhotos, getPopularPhotos, changeActiveFilter };

@@ -53,9 +53,9 @@ effects.forEach((input) => {
 });
 
 const resetEffect = () => {
-  sliderElement.value = '';
-  applyFilter('none');
-  updateSlider('none');
+  currentEffect = 'none';
+  image.style.filter = '';
+  sliderElement.noUiSlider.updateOptions(FILTERS_SETTINGS['none']);
   sliderBox.classList.add('hidden');
 };
 

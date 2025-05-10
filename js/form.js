@@ -1,7 +1,7 @@
-import { onEnterKey } from './util.js';
+import { checkForEnter } from './util.js';
 import { isValid } from './validation.js';
 import { resetEffect, checkForNoEffects } from './slider.js';
-import { initScale } from './scale.js';
+import { enableScale } from './scale.js';
 import { sendData } from './api.js';
 import { MESSAGES } from './constants.js';
 import { setEscControl, removeEscControl } from './escControl.js';
@@ -14,8 +14,9 @@ const submitButton = document.querySelector('.img-upload__submit');
 const image = document.querySelector('.img-upload__preview img');
 const hashtag = document.querySelector('.text__hashtags');
 const description = document.querySelector('.text__description');
+const defaultEffectInput = document.querySelector('input[name="effect"][value="none"]');
 
-initScale();
+enableScale();
 
 const canCloseForm = () => !(document.activeElement === hashtag || document.activeElement === description);
 
@@ -24,6 +25,10 @@ const closeForm = () => {
   document.body.classList.remove('modal-open');
   form.reset();
   image.style.transform = 'scale(1)';
+  resetEffect();
+  if (defaultEffectInput) {
+    defaultEffectInput.checked = true;
+  }
 };
 
 const showMessage = (messageType) => {
@@ -45,13 +50,13 @@ const showMessage = (messageType) => {
   });
 };
 
-const closeOnEnter = (evt) => {
-  if (onEnterKey(evt)) {
+const onEnterPress = (evt) => {
+  if (checkForEnter(evt)) {
     closeForm();
   }
 };
 
-const closeOnClick = (evt) => {
+const onCloseButtonCLick = (evt) => {
   evt.preventDefault();
   closeForm();
 };
@@ -59,8 +64,8 @@ const closeOnClick = (evt) => {
 const changeUploadedPhoto = () => {
   photoEdit.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  closeFormButton.addEventListener('click', closeOnClick);
-  closeFormButton.addEventListener('keydown', closeOnEnter);
+  closeFormButton.addEventListener('click', onCloseButtonCLick);
+  closeFormButton.addEventListener('keydown', onEnterPress);
   checkForNoEffects();
   setEscControl(closeForm, canCloseForm);
 };
@@ -88,7 +93,7 @@ form.addEventListener('submit', (evt) => {
     sendData(form)
       .then(() => {
         showMessage('success');
-        resetEffect();
+        closeForm();
       })
       .catch(() => {
         showMessage('error');
