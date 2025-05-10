@@ -1,4 +1,4 @@
-import { onEnterKey } from './util.js';
+import { checkForEnter } from './util.js';
 import { renderComments, createComments, clearComments, uploadMoreButton } from './render-comments.js';
 import { setEscControl } from './escControl.js';
 
@@ -13,8 +13,8 @@ const closePopup = () => {
   clearComments(commentsList);
 };
 
-const closeOnEnter = (evt) => {
-  if (onEnterKey(evt)) {
+const onEnterPress = (evt) => {
+  if (checkForEnter(evt)) {
     closePopup();
   }
 };
@@ -22,7 +22,7 @@ const closeOnEnter = (evt) => {
 const openPopup = (evt, data) => {
   popup.classList.remove('hidden');
   setEscControl(closePopup);
-  popupCloseButton.addEventListener('keydown', closeOnEnter);
+  popupCloseButton.addEventListener('keydown', onEnterPress);
   const picture = evt.target.closest('.picture');
   popup.querySelector('.likes-count').textContent = picture.querySelector('.picture__likes').textContent;
   popup.querySelector('.big-picture__img').firstElementChild.src = picture.querySelector('.picture__img').src;

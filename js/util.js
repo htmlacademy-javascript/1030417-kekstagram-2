@@ -7,7 +7,7 @@ const getRandomIntegerInRange = (a, b) => {
   return Math.round(Math.random() * (upper - lower) + lower);
 };
 
-const onEnterKey = (evt) => evt.key === 'Enter';
+const checkForEnter = (evt) => evt.key === 'Enter';
 
 export const showAlert = () => {
   const errorMessage = document.querySelector('#data-error').content.querySelector('.data-error');
@@ -28,5 +28,5 @@ export function debounce(callback, timeoutDelay = 500) {
 
 export {
   getRandomIntegerInRange,
-  onEnterKey
+  checkForEnter
 };
